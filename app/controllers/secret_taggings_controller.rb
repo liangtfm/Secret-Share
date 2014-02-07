@@ -1,0 +1,2 @@
+class SecretTaggingsController < ApplicationController
+end

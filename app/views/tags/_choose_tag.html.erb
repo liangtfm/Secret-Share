@@ -1,0 +1,9 @@
+<select name="secret[tag_ids][]">
+<% Tag.all.each do |tag| %>
+
+  <option value="<%= tag.id %>">
+    <%= tag.name %>
+  </option>
+
+<% end %>
+</select>

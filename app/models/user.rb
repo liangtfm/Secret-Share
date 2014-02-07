@@ -24,6 +24,12 @@ class User < ActiveRecord::Base
   source: :out_friend
 
 
+  has_many :tags,
+  class_name: 'Tag',
+  foreign_key: :creator_id,
+  primary_key: :id
+
+
   validates :password_digest, :presence => { :message => "Password can't be blank" }
   validates :password, :length => { :minimum => 6, :allow_nil => true }
   validates :session_token, :presence => true

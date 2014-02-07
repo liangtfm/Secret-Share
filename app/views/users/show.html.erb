@@ -6,8 +6,6 @@
       event.preventDefault();
       var formData = $(this).serialize();
       var formObject = $(this).serializeJSON();
-
-
       var form = $(this);
 
       $.ajax({
@@ -20,14 +18,28 @@
           var input = $(label).children();
 
           $(input).val("");
-
           $('#secrets').prepend("<li>"+formObject.secret.title+"</li>");
         }
 
       });
 
     });
+
+    var selectBox = $('#tag-selection').html();
+
+    $('#add-tag').on('click', function(event){
+
+      var $section = $('#tag-selection');
+      $section.append(selectBox);
+
+    });
+
+
   });
+
+</script>
+
+<script type="application/json">
 
 </script>
 
@@ -41,5 +53,10 @@
 <ul id="secrets">
   <% @user.received_secrets.each do |secret| %>
     <li><%= secret.title %></li>
+    <ul>
+      <% secret.tags.each do |tag| %>
+        <li><%= tag.name %></li>
+      <% end %>
+    </ul>
   <% end %>
 </ul>

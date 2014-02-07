@@ -5,6 +5,8 @@ SecretShareAjax::Application.routes.draw do
     delete "/friendships", action: "destroy", controller: "friendships"
   end
 
+  resources :tags, only: [:create]
+
   resources :secrets, except: [:new]
 
   resource :session, :only => [:create, :destroy, :new]

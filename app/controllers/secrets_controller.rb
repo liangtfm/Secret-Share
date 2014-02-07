@@ -5,6 +5,7 @@ class SecretsController < ApplicationController
 
   def create
     @secret = current_user.authored_secrets.new(params[:secret])
+    @secret.tag_ids = params[:secret][:tag_ids]
 
     if @secret.save
       head :ok

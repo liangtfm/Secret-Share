@@ -10,7 +10,7 @@ function toggleFriendButtons ($el) {
 }
 
   $(document).ready(function() {
-    $('ul').on("click", "input[type=submit]", function(event){
+    $('#users').on("click", "input[type=submit]", function(event){
 
       event.preventDefault();
 
@@ -62,10 +62,10 @@ function toggleFriendButtons ($el) {
   }
 </style>
 
-<ul>
+<ul id="users">
   <% @users.each do |user| %>
 
-
+  <% if current_user.id != user.id %>
 
   <li class="friend-buttons <%= Friendship.can_unfriend?(user.id, current_user.id) ? 'can-unfriend' : 'can-friend' %>">
 
@@ -76,6 +76,9 @@ function toggleFriendButtons ($el) {
       <%= button_to "Unfriend! :(", user_friendships_url(user), method: :delete, class: "unfriend", data: user.id %>
 
   </li>
+  <br>
+
+   <% end %>
   <% end %>
 
 </ul>
