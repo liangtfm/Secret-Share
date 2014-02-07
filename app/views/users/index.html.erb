@@ -1,16 +1,82 @@
 <h1> Users </h1>
 
+<script type="text/javascript">
+
+function toggleFriendButtons ($el) {
+  console.log("here")
+
+  $el.toggleClass("friend-buttons can-unfriend");
+  $el.toggleClass("friend-buttons can-friend");
+
+}
+
+  $(document).ready(function() {
+    $('ul').on("click", "input[type=submit]", function(event){
+
+      event.preventDefault();
+
+      var $button = $(this);
+      var formData = $button.serialize();
+      var userId = parseInt($button.attr("data"));
+
+      var $containingLi = $button.closest('li');
+
+      $button.attr("disabled", "");
+
+      if ($button.is(".friend")) {
+
+        $button.attr("value", "Friending...");
+
+        $.ajax({
+          url: "/users/" + userId + "/friendships",
+          type: "POST",
+          data: formData,
+          success: function() {
+            toggleFriendButtons($containingLi);
+          }
+        });
+        } else if ($button.is(".unfriend")) {
+          $button.attr("value", "Unfriending...");
+
+          $.ajax({
+            url: "/users/" + userId + "/friendships",
+            type: "DELETE",
+            data: formData,
+            success: function() {
+              toggleFriendButtons($containingLi);
+            }
+          });
+        }
+
+    });
+  });
+
+</script>
+
+<style>
+  li.friend-buttons.can-friend input.unfriend {
+    display: none;
+  }
+
+  li.friend-buttons.can-unfriend input.friend {
+    display: none;
+  }
+</style>
+
 <ul>
-<% @users.each do |user| %>
+  <% @users.each do |user| %>
 
-<li>
-    <%= link_to user.username, user_url(user) %>
 
-    <% unless user.id == current_user.id  || Friendship.can_friend?(user.id, current_user.id)  %>
 
-      <%= render "friendships/form", user: user %>
+  <li class="friend-buttons <%= Friendship.can_unfriend?(user.id, current_user.id) ? 'can-unfriend' : 'can-friend' %>">
 
-    <% end %>
-</li>
-<% end %>
+      <%= link_to user.username, user_url(user) %>
+
+      <%= button_to "Friend!", user_friendships_url(user), class: "friend", data: user.id %>
+
+      <%= button_to "Unfriend! :(", user_friendships_url(user), method: :delete, class: "unfriend", data: user.id %>
+
+  </li>
+  <% end %>
+
 </ul>
