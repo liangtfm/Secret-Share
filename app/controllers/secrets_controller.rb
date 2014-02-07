@@ -8,7 +8,7 @@ class SecretsController < ApplicationController
     @secret.tag_ids = params[:secret][:tag_ids]
 
     if @secret.save
-      head :ok
+      render partial: "secrets/secret", locals: {secret: @secret}
     else
       flash.now[:error] = @secret.errors.full_messages
       render :new
